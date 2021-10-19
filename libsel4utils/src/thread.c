@@ -69,6 +69,12 @@ int sel4utils_configure_thread_config(vka_t *vka, vspace_t *parent, vspace_t *al
         res->reply.cptr = config.reply;
     }
 
+    if (vka_alloc_fpu(vka, &res->fpu)) {
+        ZF_LOGE("Failed to allocate fpu");
+        sel4utils_clean_up_thread(vka, alloc, res);
+        return -1;
+    }
+
     if (config.sched_params.create_sc) {
         if (!config_set(CONFIG_KERNEL_MCS)) {
             ZF_LOGE("Cannot create a scheduling context on a non-RT kernel");
@@ -109,6 +115,12 @@ int sel4utils_configure_thread_config(vka_t *vka, vspace_t *parent, vspace_t *al
     if (error != seL4_NoError) {
         ZF_LOGE("TCB configure failed with seL4 error code %d", error);
         sel4utils_clean_up_thread(vka, alloc, res);
+        return -1;
+    }
+
+    error = seL4_TCB_BindFPU(res->tcb.cptr, res->fpu.cptr);
+    if (error) {
+        ZF_LOGE("Failed to bind FPU, %d", error);
         return -1;
     }
 
@@ -217,6 +229,10 @@ void sel4utils_clean_up_thread(vka_t *vka, vspace_t *alloc, sel4utils_thread_t *
 
     if (thread->own_reply && thread->reply.cptr != 0) {
         vka_free_object(vka, &thread->reply);
+    }
+
+    if (thread->fpu.cptr != 0) {
+        vka_free_object(vka, &thread->fpu);
     }
 
     memset(thread, 0, sizeof(sel4utils_thread_t));

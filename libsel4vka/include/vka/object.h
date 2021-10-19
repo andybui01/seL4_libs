@@ -163,6 +163,16 @@ static inline int vka_alloc_sched_context_size(UNUSED vka_t *vka, UNUSED vka_obj
 #endif
 }
 
+static inline int vka_alloc_fpu(vka_t *vka, vka_object_t *result)
+{
+#if defined(CONFIG_ARCH_AARCH64) && defined(CONFIG_HAVE_FPU)
+    return vka_alloc_object(vka, seL4_ARM_FPUObject, seL4_FPUBits, result);
+#else
+    ZF_LOGW("Allocating FPU on arch that's not aarch64");
+    return ENOSYS;
+#endif
+}
+
 static inline int vka_alloc_endpoint(vka_t *vka, vka_object_t *result)
 {
     return vka_alloc_object(vka, seL4_EndpointObject, seL4_EndpointBits, result);
@@ -319,4 +329,3 @@ vka_get_object_size(seL4_Word objectType, seL4_Word objectSize)
         return vka_arch_get_object_size(objectType);
     }
 }
-

@@ -52,8 +52,11 @@ vka_arch_get_object_size(seL4_Word objectType)
     case seL4_ARM_IOPageTableObject:
         return seL4_IOPageTableBits;
 #endif
+#ifdef CONFIG_HAVE_FPU
+        case seL4_ARM_FPUObject:
+            return seL4_FPUBits;
+#endif
     default:
         return vka_arm_mode_get_object_size(objectType);;
     }
 }
-
