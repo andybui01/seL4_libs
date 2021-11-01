@@ -218,6 +218,16 @@ typedef ssize_t (*simple_get_extended_bootinfo_len_fn)(void *data, seL4_Word typ
  */
 typedef ssize_t (*simple_get_extended_bootinfo_fn)(void *data, seL4_Word type, void *dest, ssize_t max_len);
 
+/**
+ * Request a cap to an FPU object
+ *
+ * @param data cookie for the underlying implementation
+ * @param the CNode in which to put this cap
+ * @param the index within the CNode to put cap
+ * @param Depth of index
+ */
+typedef seL4_Error (*simple_get_fpu_fn)(seL4_CPtr untyped, seL4_CNode cnode, seL4_Word index, uint8_t depth);
+
 typedef struct simple_t {
     void *data;
     simple_get_frame_cap_fn frame_cap;
@@ -237,6 +247,7 @@ typedef struct simple_t {
     simple_get_sched_ctrl_fn sched_ctrl;
     simple_get_extended_bootinfo_len_fn extended_bootinfo_len;
     simple_get_extended_bootinfo_fn extended_bootinfo;
+    simple_get_fpu_fn fpu;
     arch_simple_t arch_simple;
 } simple_t;
 
@@ -307,6 +318,19 @@ static inline seL4_Error simple_get_IRQ_handler(simple_t *simple, int irq, cspac
         return seL4_InvalidArgument;
     }
     return simple->arch_simple.irq(simple->data, irq, path.root, path.capPtr, path.capDepth);
+}
+
+static inline seL4_Error simple_get_FPU(simple_t *simple, seL4_CPtr untyped, cspacepath_t path)
+{
+    if (!simple) {
+        ZF_LOGE("Simple is NULL");
+        return seL4_InvalidArgument;
+    }
+    if (!simple->fpu) {
+        ZF_LOGE("%s not implemented", __FUNCTION__);
+        return seL4_InvalidArgument;
+    }
+    return simple->fpu(untyped, path.root, path.capPtr, path.capDepth);
 }
 
 static inline seL4_Error simple_ASIDPool_assign(simple_t *simple, seL4_CPtr vspace)
@@ -623,4 +647,3 @@ static inline ssize_t simple_get_extended_bootinfo(simple_t *simple, seL4_Word t
     }
     return simple->extended_bootinfo(simple->data, type, dest, max_len);
 }
-

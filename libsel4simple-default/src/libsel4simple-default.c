@@ -247,6 +247,11 @@ ssize_t simple_default_get_extended_bootinfo(void *data, seL4_Word type, void *d
     return -1;
 }
 
+seL4_Error simple_default_get_fpu(seL4_CPtr untyped, seL4_CNode root, seL4_Word index, uint8_t depth)
+{
+    return seL4_FPUControl_Get(seL4_CapFPUControl, untyped, root, index, depth);
+}
+
 void simple_default_init_bootinfo(simple_t *simple, seL4_BootInfo *bi)
 {
     assert(simple);
@@ -270,5 +275,6 @@ void simple_default_init_bootinfo(simple_t *simple, seL4_BootInfo *bi)
     simple->sched_ctrl = &simple_default_sched_control;
     simple->extended_bootinfo_len = &simple_default_get_extended_bootinfo_size;
     simple->extended_bootinfo = &simple_default_get_extended_bootinfo;
+    simple->fpu = &simple_default_get_fpu;
     simple_default_init_arch_simple(&simple->arch_simple, NULL);
 }
