@@ -57,9 +57,6 @@ typedef struct {
     sched_params_t sched_params;
 
     seL4_CPtr asid_pool;
-
-    vka_object_t fpu_untyped;
-    seL4_CPtr fpu;
 } sel4utils_process_config_t;
 
 static inline sel4utils_process_config_t process_config_asid_pool(sel4utils_process_config_t config,

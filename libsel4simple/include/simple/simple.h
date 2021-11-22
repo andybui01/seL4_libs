@@ -247,7 +247,6 @@ typedef struct simple_t {
     simple_get_sched_ctrl_fn sched_ctrl;
     simple_get_extended_bootinfo_len_fn extended_bootinfo_len;
     simple_get_extended_bootinfo_fn extended_bootinfo;
-    simple_get_fpu_fn fpu;
     arch_simple_t arch_simple;
 } simple_t;
 
@@ -318,19 +317,6 @@ static inline seL4_Error simple_get_IRQ_handler(simple_t *simple, int irq, cspac
         return seL4_InvalidArgument;
     }
     return simple->arch_simple.irq(simple->data, irq, path.root, path.capPtr, path.capDepth);
-}
-
-static inline seL4_Error simple_get_FPU(simple_t *simple, seL4_CPtr untyped, cspacepath_t path)
-{
-    if (!simple) {
-        ZF_LOGE("Simple is NULL");
-        return seL4_InvalidArgument;
-    }
-    if (!simple->fpu) {
-        ZF_LOGE("%s not implemented", __FUNCTION__);
-        return seL4_InvalidArgument;
-    }
-    return simple->fpu(untyped, path.root, path.capPtr, path.capDepth);
 }
 
 static inline seL4_Error simple_ASIDPool_assign(simple_t *simple, seL4_CPtr vspace)
