@@ -119,6 +119,7 @@ int sel4utils_configure_thread_config(vka_t *vka, vspace_t *parent, vspace_t *al
     }
 
     error = seL4_TCB_BindFPU(res->tcb.cptr, res->fpu.cptr);
+
     if (error) {
         ZF_LOGE("Failed to bind FPU, %d", error);
         return -1;

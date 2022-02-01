@@ -77,6 +77,8 @@ set(HighestSyscall 400)
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -D_XOPEN_SOURCE=700 -DMUSLC_HIGHEST_SYSCALL=${HighestSyscall}")
 
+add_compile_options(-mgeneral-regs-only)
+
 add_library(sel4muslcsys STATIC EXCLUDE_FROM_ALL ${deps})
 # Force the muslcsys_init_muslc constructor to be included in dependants
 target_link_options(sel4muslcsys BEFORE INTERFACE "-Wl,-umuslcsys_init_muslc")

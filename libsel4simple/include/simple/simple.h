@@ -218,16 +218,6 @@ typedef ssize_t (*simple_get_extended_bootinfo_len_fn)(void *data, seL4_Word typ
  */
 typedef ssize_t (*simple_get_extended_bootinfo_fn)(void *data, seL4_Word type, void *dest, ssize_t max_len);
 
-/**
- * Request a cap to an FPU object
- *
- * @param data cookie for the underlying implementation
- * @param the CNode in which to put this cap
- * @param the index within the CNode to put cap
- * @param Depth of index
- */
-typedef seL4_Error (*simple_get_fpu_fn)(seL4_CPtr untyped, seL4_CNode cnode, seL4_Word index, uint8_t depth);
-
 typedef struct simple_t {
     void *data;
     simple_get_frame_cap_fn frame_cap;
