@@ -165,7 +165,7 @@ static inline int vka_alloc_sched_context_size(UNUSED vka_t *vka, UNUSED vka_obj
 
 static inline int vka_alloc_fpu(vka_t *vka, vka_object_t *result)
 {
-#if defined(CONFIG_ARCH_AARCH64) && defined(CONFIG_HAVE_FPU)
+#ifdef CONFIG_HAVE_FPU
     return vka_alloc_object(vka, seL4_ARM_FPUObject, seL4_FPUBits, result);
 #else
     ZF_LOGW("Allocating FPU on arch that's not aarch64");

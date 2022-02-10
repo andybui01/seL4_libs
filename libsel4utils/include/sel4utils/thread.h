@@ -41,7 +41,7 @@ typedef struct sel4utils_thread {
     bool own_sc;
     bool own_reply;
     vka_object_t reply;
-#if defined(CONFIG_ARCH_AARCH64) && defined(CONFIG_HAVE_FPU)
+#ifdef CONFIG_HAVE_FPU
     vka_object_t fpu;
 #endif
 } sel4utils_thread_t;
