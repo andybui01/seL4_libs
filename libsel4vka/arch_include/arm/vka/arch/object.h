@@ -53,7 +53,11 @@ vka_arch_get_object_size(seL4_Word objectType)
         return seL4_IOPageTableBits;
 #endif
 #ifdef CONFIG_HAVE_FPU
+#if defined(CONFIG_ARCH_AARCH64) || defined(CONFIG_ARCH_AARCH32)
         case seL4_ARM_FPUObject:
+#elif defined(CONFIG_ARCH_RISCV64) || defined(CONFIG_ARCH_RISCV32)
+        case seL4_RISCV_FPUObject:
+#endif
             return seL4_FPUBits;
 #endif
     default:

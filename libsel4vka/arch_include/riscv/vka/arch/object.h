@@ -33,6 +33,10 @@ vka_arch_get_object_size(seL4_Word objectType)
 #endif
     case seL4_RISCV_PageTableObject:
         return seL4_PageTableBits;
+#ifdef CONFIG_HAVE_FPU
+    case seL4_RISCV_FPUObject:
+        return seL4_FPUBits;
+#endif
 
     default:
          ZF_LOGE("Unknown object type %ld", (long)objectType);
