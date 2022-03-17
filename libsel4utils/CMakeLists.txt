@@ -58,6 +58,7 @@ target_link_libraries(
     sel4runtime
     sel4vspace
     sel4simple
+    sel4allocman
     sel4platsupport
     elf
     cpio

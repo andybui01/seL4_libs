@@ -41,6 +41,9 @@ typedef struct utspace_split {
     struct utspace_split_node *dev_mem_heads[CONFIG_WORD_SIZE];
 } utspace_split_t;
 
+utspace_split_t *splot;
+
+void utspace_split_list(utspace_split_t *split);
 void utspace_split_create(utspace_split_t *split);
 int _utspace_split_add_uts(struct allocman *alloc, void *_split, size_t num, const cspacepath_t *uts, size_t *size_bits, uintptr_t *paddr, int utType);
 
@@ -50,6 +53,7 @@ void _utspace_split_free(struct allocman *alloc, void *_split, seL4_Word cookie,
 uintptr_t _utspace_split_paddr(void *_split, seL4_Word cookie, size_t size_bits);
 
 static inline struct utspace_interface utspace_split_make_interface(utspace_split_t *split) {
+    splot = split;
     return (struct utspace_interface) {
         .alloc = _utspace_split_alloc,
         .free = _utspace_split_free,

@@ -343,3 +343,21 @@ uintptr_t _utspace_split_paddr(void *_split, seL4_Word cookie, size_t size_bits)
     struct utspace_split_node *node = (struct utspace_split_node *)cookie;
     return node->paddr;
 }
+
+void utspace_split_list(utspace_split_t *split) {
+    printf("==================================\n");
+    for (int i = 0; i < CONFIG_WORD_SIZE; i++) {
+        struct utspace_split_node *node = split->heads[i];
+        int count = 0;
+
+        while (node != NULL) {
+            count++;
+            node = node->next;
+        }
+        
+        if (count != 0) {
+            printf("%d untypeds of size %d\n", count, i);
+        }
+    }
+    printf("==================================\n");
+}
