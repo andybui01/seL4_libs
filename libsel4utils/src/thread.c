@@ -68,7 +68,6 @@ int sel4utils_configure_thread_config(vka_t *vka, vspace_t *parent, vspace_t *al
     } else {
         res->reply.cptr = config.reply;
     }
-
     if (vka_alloc_fpu(vka, &res->fpu)) {
         ZF_LOGE("Failed to allocate fpu");
         sel4utils_clean_up_thread(vka, alloc, res);
