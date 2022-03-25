@@ -25,6 +25,8 @@
 #include <sel4utils/mapping.h>
 #include <sel4utils/helpers.h>
 
+#include <allocman/utspace/split.h>
+
 /* This library works with our cpio set up in the build system */
 extern char _cpio_archive[];
 extern char _cpio_archive_end[];
@@ -495,6 +497,8 @@ static int create_fault_endpoint(vka_t *vka, sel4utils_process_t *process)
 int sel4utils_configure_process_custom(sel4utils_process_t *process, vka_t *vka,
                                        vspace_t *spawner_vspace, sel4utils_process_config_t config)
 {
+    printf("Starting\n");
+    utspace_split_list(splot);
     int error;
     sel4utils_alloc_data_t *data = NULL;
     memset(process, 0, sizeof(sel4utils_process_t));
@@ -714,6 +718,8 @@ void sel4utils_destroy_process(sel4utils_process_t *process, vka_t *vka)
     if (process->elf_phdrs) {
         free(process->elf_phdrs);
     }
+    printf("Ending\n");
+    utspace_split_list(splot);
 }
 
 seL4_CPtr sel4utils_process_init_cap(void *data, seL4_CPtr cap)

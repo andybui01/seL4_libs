@@ -345,6 +345,7 @@ uintptr_t _utspace_split_paddr(void *_split, seL4_Word cookie, size_t size_bits)
 }
 
 void utspace_split_list(utspace_split_t *split) {
+    seL4_Word total = 0;
     printf("==================================\n");
     for (int i = 0; i < CONFIG_WORD_SIZE; i++) {
         struct utspace_split_node *node = split->heads[i];
@@ -358,6 +359,10 @@ void utspace_split_list(utspace_split_t *split) {
         if (count != 0) {
             printf("%d untypeds of size %d\n", count, i);
         }
+
+        total += count * (1ul<<i);
     }
+
+    printf("Toal: %lu\n", total);
     printf("==================================\n");
 }
